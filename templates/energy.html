@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #energy-data {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        #chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            #energy-data {
+                padding: 15px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script>
+        let chart;
+        let labels = [];
+        let dataPoints = [];
+
+        async function fetchEnergyData() {
+            try {
+                const response = await fetch('/energy');
+                const data = await response.json();
+                const currentPower = data.current_power;
+
+                if (currentPower !== undefined) {
+                    document.getElementById('energy-data').innerText = `Current Power: ${currentPower} W`;
+
+                    const now = new Date();
+                    labels.push(now);
+                    dataPoints.push(currentPower);
+
+                    if (labels.length > 30) {
+                        labels.shift();
+                        dataPoints.shift();
+                    }
+
+                    chart.update();
+                } else {
+                    console.error('Current power data is undefined');
+                }
+            } catch (error) {
+                console.error('Error fetching energy data:', error);
+            }
+        }
+
+        window.onload = function() {
+            const ctx = document.getElementById('energy-chart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Current Power (W)',
+                        data: dataPoints,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
+                        fill: true,
+                        tension: 0.0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#333'
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute'
+                            },
+                            grid: {
+                                display: true,
+                                color: 'rgba(200, 200, 200, 0.2)'
+                            },
+                            ticks: {
+                                color: '#333'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: true,
+                                color: 'rgba(200, 200, 200, 0.2)'
+                            },
+                            ticks: {
+                                color: '#333'
+                            }
+                        }
+                    }
+                }
+            });
+
+            fetchEnergyData();
+            setInterval(fetchEnergyData, 2000); // Fetch energy data every 2 seconds
+        }
+    </script>
+</head>
+<body>
+    <h1>Energy Data</h1>
+    <div>
+        <button class="back-button" onclick="location.href='/'">Back</button>
+    </div>
+    <div id="energy-data">Loading energy data...</div>
+    <div id="chart-container">
+        <canvas id="energy-chart"></canvas>
+    </div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #solar-data {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .data-item {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #555;
+        }
+                .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            #solar-data {
+                padding: 15px;
+            }
+        }
+    </style>
+    <script>
+        async function fetchSolarData() {
+            try {
+                const response = await fetch('/solar');
+                const data = await response.json();
+
+                if (data.omnik && data.zeversolar) {
+                    const omnikData = data.omnik.data;
+                    const zeversolarData = data.zeversolar.data;
+
+                    document.getElementById('omnik-current-power').innerText = `Omnik Current Power: ${omnikData.current_power}`;
+                    document.getElementById('omnik-yield-today').innerText = `Omnik Yield Today: ${omnikData.yield_today}`;
+                    document.getElementById('omnik-yield-total').innerText = `Omnik Yield Total: ${omnikData.yield_total}`;
+                    document.getElementById('zeversolar-current-power').innerText = `ZeverSolar Current Power: ${zeversolarData.current_power}`;
+                    document.getElementById('zeversolar-yield-today').innerText = `ZeverSolar Yield Today: ${zeversolarData.yield_today}`;
+                } else {
+                    console.error('Solar data is incomplete');
+                }
+            } catch (error) {
+                console.error('Error fetching solar data:', error);
+            }
+        }
+
+        window.onload = function() {
+            fetchSolarData();
+            setInterval(fetchSolarData, 30000); // Fetch solar data every 30 seconds
+        }
+    </script>
+</head>
+<body>
+    <h1>Solar Data</h1>
+    <div id="solar-data">
+        <div id="omnik-current-power" class="data-item">Loading Omnik data...</div>
+        <div id="omnik-yield-today" class="data-item"></div>
+        <div id="omnik-yield-total" class="data-item"></div>
+        <br>
+        <div id="zeversolar-current-power" class="data-item">Loading ZeverSolar data...</div>
+        <div id="zeversolar-yield-today" class="data-item"></div>
+    </div>
+    <button class="back-button" onclick="location.href='/'">Back</button>
+</body>
+</html>

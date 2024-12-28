@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - TAPO_USERNAME=${TAPO_USERNAME}
+      - TAPO_PASSWORD=${TAPO_PASSWORD}
+      - TAPO_IP=${TAPO_IP}
+    volumes:
+      - .:/app
+    command: /bin/sh -c "cp -n .env.example .env && flask run --host=0.0.0.0"
