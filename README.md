@@ -8,7 +8,7 @@ A very *simple* dashboard for TAPO P110 and Omnik / Zeversolar solar inverters I
    - Docker
      
 2. Installation:
-   - ```
+    ```
      pip install -r requirements.txt
      docker-compose up --build
      ```
