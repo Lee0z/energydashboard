@@ -21,6 +21,16 @@
             color: #333;
             margin-bottom: 20px;
         }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+        }
+        td {
+            padding: 10px;
+            text-align: center;
+            min-width: 200px;
+        }
         .link-button {
             margin: 10px;
             padding: 10px 20px;
@@ -32,18 +42,41 @@
             color: white;
             text-decoration: none;
             text-align: center;
+            display: inline-block;
         }
         .link-button:hover {
             background-color: #0056b3;
+        }
+        hr {
+            border: 1px solid #ccc;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <h1>Energy Dashboard</h1>
-    <a href="/energy_page" class="link-button">Energy Data</a>
-    <a href="/solar_page" class="link-button">Solar Data</a>
-    <a href="/tapo_devices_energy_history" class="link-button">Tapo Devices Energy History</a>
-    <a href="/solar_data_history" class="link-button">Solar Data History</a>
-    <a href="/add_tapo_device" class="link-button">Add TAPO Device</a>
+    <table>
+        <tr>
+            <td colspan="2"><strong>Real-time Data</strong></td>
+            <td><strong>History</strong></td>
+            <td><strong>Manage Devices</strong></td>
+        </tr>
+        <tr>
+            <td><a href="/energy_page" class="link-button">PC RIG Energy Data</a></td>
+            <td><a href="/solar_page" class="link-button">Solar Data</a></td>
+            <td><a href="/tapo_devices_energy_history" class="link-button">Tapo Devices Energy History</a></td>
+            <td><a href="/add_tapo_device" class="link-button">Add TAPO Device</a></td>
+        </tr>
+    </table>
+    <hr>
+    <table>
+        <tr>
+            <td colspan="2"></td>
+            <td><a href="/solar_data_history" class="link-button">Solar Data History</a></td>
+            <td></td>
+        </tr>
+    </table>
 </body>
 </html>
