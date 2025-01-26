@@ -146,6 +146,11 @@ def tapo_devices_energy_history():
     energy_data = EnergyData.query.all()
     return render_template('tapo_devices_energy_history.html', energy_data=energy_data)
 
+@app.route('/solar_data_history', methods=['GET'])
+def solar_data_history():
+    solar_data = SolarPowerData.query.all()
+    return render_template('solar_data_history.html', solar_data=solar_data)
+
 def fetch_solar_data():
     try:
         response = requests.get("http://localhost:5000/solar")

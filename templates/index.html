@@ -13,33 +13,36 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            background-color: #f4f4f9;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
         }
-        .button-container button {
+        .link-button {
             margin: 10px;
-            padding: 15px 30px;
+            padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
             background-color: #007BFF;
             color: white;
+            text-decoration: none;
+            text-align: center;
         }
-        .button-container button:hover {
+        .link-button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <h1>Energy Dashboard</h1>
-    <div class="button-container">
-        <button onclick="location.href='/energy_page'">Check PC Rig Energy</button>
-        <button onclick="location.href='/solar_page'">Check Solar Power</button>
-        <button onclick="location.href='/tapo_devices_energy_history'">Tapo Devices Energy History</button> <!-- New button -->
-    </div>
+    <a href="/energy_page" class="link-button">Energy Data</a>
+    <a href="/solar_page" class="link-button">Solar Data</a>
+    <a href="/tapo_devices_energy_history" class="link-button">Tapo Devices Energy History</a>
+    <a href="/solar_data_history" class="link-button">Solar Data History</a>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tapo Devices Energy History</title>
+    <title>Solar Data History</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,21 +53,27 @@
     </style>
 </head>
 <body>
-    <h1>Tapo Devices Energy History</h1>
+    <h1>Solar Data History</h1>
     <table>
         <thead>
             <tr>
-                <th>Device ID</th>
-                <th>Timestamp</th>
+                <th>Source</th>
+                <th>Date</th>
+                <th>Time</th>
                 <th>Power (W)</th>
+                <th>Yield Today (kWh)</th>
+                <th>Yield Total (kWh)</th>
             </tr>
         </thead>
         <tbody>
-            {% for data in energy_data %}
+            {% for data in solar_data %}
             <tr>
-                <td>{{ data.device_id }}</td>
-                <td>{{ data.timestamp }}</td>
+                <td>{{ data.source }}</td>
+                <td>{{ data.date }}</td>
+                <td>{{ data.time }}</td>
                 <td>{{ data.power }}</td>
+                <td>{{ data.yield_today }}</td>
+                <td>{{ data.yield_total }}</td>
             </tr>
             {% endfor %}
         </tbody>
