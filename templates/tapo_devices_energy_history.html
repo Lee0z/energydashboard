@@ -50,10 +50,35 @@
         .back-button:hover {
             background-color: #0056b3;
         }
+        .filter-form {
+            margin-bottom: 20px;
+        }
+        .filter-form label {
+            margin-right: 10px;
+        }
+        .filter-form input, .filter-form select {
+            padding: 5px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Tapo Devices Energy History</h1>
+    <form class="filter-form" method="GET">
+        <label for="device_id">Filter by Device ID:</label>
+        <input type="text" id="device_id" name="device_id" value="{{ filter_device_id }}">
+        <label for="sort_by">Sort by:</label>
+        <select id="sort_by" name="sort_by">
+            <option value="timestamp" {% if sort_by == 'timestamp' %}selected{% endif %}>Timestamp</option>
+            <option value="power" {% if sort_by == 'power' %}selected{% endif %}>Power</option>
+        </select>
+        <label for="order">Order:</label>
+        <select id="order" name="order">
+            <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascending</option>
+            <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
     <table>
         <thead>
             <tr>

@@ -143,13 +143,39 @@ def solar_page():
 
 @app.route('/tapo_devices_energy_history', methods=['GET'])
 def tapo_devices_energy_history():
-    energy_data = EnergyData.query.all()
-    return render_template('tapo_devices_energy_history.html', energy_data=energy_data)
+    sort_by = request.args.get('sort_by', 'timestamp')
+    order = request.args.get('order', 'asc')
+    filter_device_id = request.args.get('device_id', None)
+
+    query = EnergyData.query
+    if filter_device_id:
+        query = query.filter_by(device_id=filter_device_id)
+    
+    if order == 'desc':
+        query = query.order_by(db.desc(getattr(EnergyData, sort_by)))
+    else:
+        query = query.order_by(getattr(EnergyData, sort_by))
+
+    energy_data = query.all()
+    return render_template('tapo_devices_energy_history.html', energy_data=energy_data, sort_by=sort_by, order=order, filter_device_id=filter_device_id)
 
 @app.route('/solar_data_history', methods=['GET'])
 def solar_data_history():
-    solar_data = SolarPowerData.query.all()
-    return render_template('solar_data_history.html', solar_data=solar_data)
+    sort_by = request.args.get('sort_by', 'date')
+    order = request.args.get('order', 'asc')
+    filter_source = request.args.get('source', None)
+
+    query = SolarPowerData.query
+    if filter_source:
+        query = query.filter_by(source=filter_source)
+    
+    if order == 'desc':
+        query = query.order_by(db.desc(getattr(SolarPowerData, sort_by)))
+    else:
+        query = query.order_by(getattr(SolarPowerData, sort_by))
+
+    solar_data = query.all()
+    return render_template('solar_data_history.html', solar_data=solar_data, sort_by=sort_by, order=order, filter_source=filter_source)
 
 @app.route('/add_tapo_device', methods=['GET', 'POST'])
 def add_tapo_device():
