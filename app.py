@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 import asyncio
 import energyCheck as ec
 import scraperOmnik
@@ -150,6 +150,23 @@ def tapo_devices_energy_history():
 def solar_data_history():
     solar_data = SolarPowerData.query.all()
     return render_template('solar_data_history.html', solar_data=solar_data)
+
+@app.route('/add_tapo_device', methods=['GET', 'POST'])
+def add_tapo_device():
+    if request.method == 'POST':
+        name = request.form['name']
+        ip_address = request.form['ip_address']
+        # Check if the device already exists
+        existing_device = TapoDevice.query.filter_by(ip_address=ip_address).first()
+        if not existing_device:
+            # Add the new Tapo device
+            new_device = TapoDevice(name=name, ip_address=ip_address)
+            db.session.add(new_device)
+            db.session.commit()
+            return redirect(url_for('tapo_devices_energy_history'))
+        else:
+            return render_template('add_tapo_device.html', error="Device with this IP address already exists.")
+    return render_template('add_tapo_device.html')
 
 def fetch_solar_data():
     try:
