@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,7 +38,10 @@
             font-size: 18px;
             color: #555;
         }
-                .back-button {
+        .error {
+            color: red;
+        }
+        .back-button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -65,20 +69,35 @@
                 const response = await fetch('/solar');
                 const data = await response.json();
 
-                if (data.omnik && data.zeversolar) {
-                    const omnikData = data.omnik.data;
-                    const zeversolarData = data.zeversolar.data;
+                if (data.error) {
+                    document.getElementById('error-message').innerText = `Error: ${data.error}`;
+                    return;
+                }
 
+                console.log(data); // Debugging: log the data to the console
+
+                if (data.omnik) {
+                    const omnikData = data.omnik[0].data;
                     document.getElementById('omnik-current-power').innerText = `Omnik Current Power: ${omnikData.current_power}`;
                     document.getElementById('omnik-yield-today').innerText = `Omnik Yield Today: ${omnikData.yield_today}`;
                     document.getElementById('omnik-yield-total').innerText = `Omnik Yield Total: ${omnikData.yield_total}`;
+                } else if (data.omnik_error) {
+                    document.getElementById('omnik-current-power').innerText = `Error: ${data.omnik_error}`;
+                } else {
+                    document.getElementById('omnik-current-power').innerText = 'Omnik data is unavailable';
+                }
+
+                if (data.zeversolar) {
+                    const zeversolarData = data.zeversolar[0].data;
                     document.getElementById('zeversolar-current-power').innerText = `ZeverSolar Current Power: ${zeversolarData.current_power}`;
                     document.getElementById('zeversolar-yield-today').innerText = `ZeverSolar Yield Today: ${zeversolarData.yield_today}`;
+                } else if (data.zeversolar_error) {
+                    document.getElementById('zeversolar-current-power').innerText = `Error: ${data.zeversolar_error}`;
                 } else {
-                    console.error('Solar data is incomplete');
+                    document.getElementById('zeversolar-current-power').innerText = 'ZeverSolar data is unavailable';
                 }
             } catch (error) {
-                console.error('Error fetching solar data:', error);
+                document.getElementById('error-message').innerText = `Error fetching solar data: ${error}`;
             }
         }
 
@@ -97,6 +116,7 @@
         <br>
         <div id="zeversolar-current-power" class="data-item">Loading ZeverSolar data...</div>
         <div id="zeversolar-yield-today" class="data-item"></div>
+        <div id="error-message" class="error"></div>
     </div>
     <button class="back-button" onclick="location.href='/'">Back</button>
 </body>

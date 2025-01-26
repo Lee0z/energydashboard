@@ -2,3 +2,6 @@ Flask
 python-dotenv
 tapo
 requests
+sqlalchemy
+Flask-SQLAlchemy
+APScheduler==3.7.0

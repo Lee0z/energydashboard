@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapo Devices Energy History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tapo Devices Energy History</h1>
+    <table>
+        <tr>
+            <th>Device ID</th>
+            <th>Timestamp</th>
+            <th>Power</th>
+        </tr>
+        {% for data in energy_data %}
+        <tr>
+            <td>{{ data.device_id }}</td>
+            <td>{{ data.timestamp }}</td>
+            <td>{{ data.power }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
