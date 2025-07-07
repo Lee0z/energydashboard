@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 
 class TapoDevice (db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), unique=True, nullable=False)  # Add unique=True
     ip_address = db.Column(db.String(50), unique=True, nullable=False)
 
 class SolarData (db.Model):
@@ -49,8 +49,10 @@ def setup():
     db.create_all()  # Create database tables if they do not exist
     tapo_ip = os.getenv('TAPO_IP')
     if tapo_ip:
-        # Check if the device already exists
-        existing_device = TapoDevice.query.filter_by(ip_address=tapo_ip).first()
+        # Check if the device already exists by name or IP
+        existing_device = TapoDevice.query.filter(
+            (TapoDevice.ip_address == tapo_ip) | (TapoDevice.name == "PC_RIG")
+        ).first()
         if not existing_device:
             # Add the Tapo device with the name "PC_RIG"
             new_device = TapoDevice(name="PC_RIG", ip_address=tapo_ip)
