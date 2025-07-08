@@ -46,7 +46,6 @@ class SolarPowerData(db.Model):
 
 @app.before_request
 def setup():
-    db.create_all()  # Create database tables if they do not exist
     tapo_ip = os.getenv('TAPO_IP')
     if tapo_ip:
         # Check if the device already exists by name or IP
