@@ -198,14 +198,34 @@ def add_tapo_device():
 def fetch_solar_data():
     try:
         response = requests.get("http://localhost:5000/solar")
+        response.raise_for_status()
+        data = response.json()
+        for entry in data:
+            solar_data = SolarPowerData(
+                date=datetime.strptime(entry['date'], '%Y-%m-%d'),
+                power=entry['power'],
+                source=entry['source']
+            )
+            db.session.add(solar_data)
+        db.session.commit()
     except Exception as e:
-        pass
+        print(f"Error fetching solar data: {e}")
 
 def fetch_energy_data():
     try:
         response = requests.get("http://localhost:5000/energy")
+        response.raise_for_status()
+        data = response.json()
+        for entry in data:
+            energy_data = EnergyData(
+                timestamp=datetime.strptime(entry['timestamp'], '%Y-%m-%dT%H:%M:%S'),
+                device_id=entry['device_id'],
+                energy_consumed=entry['energy_consumed']
+            )
+            db.session.add(energy_data)
+        db.session.commit()
     except Exception as e:
-        pass
+        print(f"Error fetching energy data: {e}")
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler()
