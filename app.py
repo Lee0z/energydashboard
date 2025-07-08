@@ -213,4 +213,5 @@ if __name__ == '__main__':
     scheduler.add_job(fetch_solar_data, 'interval', seconds=10, id='fetch_solar_data')
     scheduler.add_job(fetch_energy_data, 'interval', seconds=10, id='fetch_energy_data')
     scheduler.start()
-    app.run(port=5000, use_reloader=False)
+    app.run(port=5003, use_reloader=False)
+
