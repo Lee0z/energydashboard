@@ -2,7 +2,7 @@ services:
   web:
     build: .
     ports:
-      - "5000:5000"
+      - "5003:5003"
     environment:
       - FLASK_ENV=development
       - TAPO_USERNAME=${TAPO_USERNAME}
@@ -15,4 +15,4 @@ services:
       - DATABASE_URL=sqlite:///app.db
     volumes:
       - .:/app
-    command: /bin/sh -c "cp -n .env.example .env && flask run --host=0.0.0.0"
+    command: /bin/sh -c "cp -n .env.example .env && flask run --host=0.0.0.0 --port=5003"
