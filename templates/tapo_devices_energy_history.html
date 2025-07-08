@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tapo Devices Energy History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            background-color: #f4f4f9;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            max-width: 800px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .back-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .filter-form {
+            margin-bottom: 20px;
+        }
+        .filter-form label {
+            margin-right: 10px;
+        }
+        .filter-form input, .filter-form select {
+            padding: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tapo Devices Energy History</h1>
+    <form class="filter-form" method="GET">
+        <label for="device_id">Filter by Device ID:</label>
+        <input type="text" id="device_id" name="device_id" value="{{ filter_device_id }}">
+        <label for="sort_by">Sort by:</label>
+        <select id="sort_by" name="sort_by">
+            <option value="timestamp" {% if sort_by == 'timestamp' %}selected{% endif %}>Timestamp</option>
+            <option value="power" {% if sort_by == 'power' %}selected{% endif %}>Power</option>
+        </select>
+        <label for="order">Order:</label>
+        <select id="order" name="order">
+            <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascending</option>
+            <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descending</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Device ID</th>
+                <th>Timestamp</th>
+                <th>Power (W)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in energy_data %}
+            <tr>
+                <td>{{ data.device_id }}</td>
+                <td>{{ data.timestamp }}</td>
+                <td>{{ data.power }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="back-button" onclick="location.href='/'">Back</button>
+</body>
+</html>

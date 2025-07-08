@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     build: .
@@ -14,6 +12,7 @@ services:
       - OMNIK_PASSWORD=${OMNIK_PASSWORD}
       - OMNIK_URL=${OMNIK_URL}
       - ZEVERSOLAR_URL=${ZEVERSOLAR_URL}
+      - DATABASE_URL=sqlite:///app.db
     volumes:
       - .:/app
     command: /bin/sh -c "cp -n .env.example .env && flask run --host=0.0.0.0 --port=5003"

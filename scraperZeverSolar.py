@@ -1,6 +1,7 @@
 import requests
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -9,8 +10,8 @@ def scrapeZeverSolar():
     data_url = f"{base_url}/home.cgi"
 
     try:
-        # Fetch the data from home.cgi
-        response = requests.get(data_url)
+        # Fetch the data from home.cgi with a timeout
+        response = requests.get(data_url, timeout=5)
         response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
         
         # Parse the response data
@@ -30,7 +31,8 @@ def scrapeZeverSolar():
         # Create a dictionary with the extracted data
         data_dict = {
             "current_power": pac + " W",
-            "yield_today": e_today + " kWh"
+            "yield_today": e_today + " kWh",
+            "datetime": datetime.utcnow().isoformat()  # Include the current date and time
         }
         
         # Return the data as a dictionary
@@ -39,9 +41,9 @@ def scrapeZeverSolar():
     except requests.exceptions.HTTPError as http_err:
         return {"error": f"HTTP error occurred: {http_err}"}
     except requests.exceptions.ConnectionError as conn_err:
-        return {"error": f"Connection error occurred: {conn_err}"}
+        return {"error": "ZeverSolar is offline"}
     except requests.exceptions.Timeout as timeout_err:
-        return {"error": f"Timeout error occurred: {timeout_err}"}
+        return {"error": "ZeverSolar is offline"}
     except requests.exceptions.RequestException as req_err:
         return {"error": f"An error occurred: {req_err}"}
     except Exception as e:
@@ -50,3 +52,4 @@ def scrapeZeverSolar():
 # Example usage
 if __name__ == "__main__":
     result = scrapeZeverSolar()
+    print(result)

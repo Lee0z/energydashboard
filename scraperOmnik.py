@@ -3,6 +3,7 @@ from requests.auth import HTTPBasicAuth
 import re
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -42,7 +43,8 @@ def scrapeOmnik():
                 data = {
                     "current_power": current_power,
                     "yield_today": yield_today,
-                    "yield_total": yield_total
+                    "yield_total": yield_total,
+                    "datetime": datetime.utcnow().isoformat()  # Include the current date and time
                 }
                 return {"data": data}
             else:
